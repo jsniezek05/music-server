@@ -16,16 +16,25 @@ module.exports = {
         if(!user) return res.status(404).send();
         let verified = user.verifyPassword(req.body.password);
         if(verified) {
-          res.json(user);
+          req.session.authenticated = user.id;
+          return res.json(user);
         }
         res.status(403).json({ error: "Please try again." });
       });
   },
 
+  logout: function(req, res) {
+    req.session.authenticated = false;
+    res.status(200).send();
+  },
+
   auth: function(req, res) {
-    User.find()
-      .then(users => {
-        res.json(users[0]);
-      });
+    if(req.session.authenticated) {
+      return User.findOne(req.session.authenticated)
+        .then(user => {
+          res.json(user);
+        })
+    }
+    return res.status(403).send("Invalid session");
   }
 };

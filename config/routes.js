@@ -35,6 +35,7 @@ module.exports.routes = {
   '/': 'AuthController.homepage',
   'post /login': 'AuthController.login',
   'get /auth': 'AuthController.auth',
+  'get /logout': 'AuthController.logout',
 
   'post /playlist/:id/song/:songId': 'PlaylistController.addSong',
   'delete /playlist/:id/song/:songId': 'PlaylistController.removeSong'

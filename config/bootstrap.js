@@ -18,7 +18,7 @@ module.exports.bootstrap = function (cb) {
   ]).then(function(models) {
     let ids = models.map(x => x.id);
     Promise.all([
-      Playlist.create({name: 'seeded playlist', songs: ids}),
+      Playlist.create({name: 'First playlist', songs: ids}),
       User.create({firstName: 'JP', lastName: 'Sniezek', email: 'sniezekjp@aol.com', password: 'abcd1234'}),
       User.create({firstName: 'Joe', lastName: 'Sniezek', email: 'jds045018@gmail.com', password: 'abcd1234'})
     ])
