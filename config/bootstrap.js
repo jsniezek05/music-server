@@ -17,8 +17,8 @@ module.exports.bootstrap = function (cb) {
     Song.create({name: 'Song 3', youtubeId: 'abcd123456'})
   ]).then(function(models) {
     let ids = models.map(x => x.id);
-    Playlist.create({name: 'seeded playlist'})
-    .then(function(playlist) {
+    Playlist.create({name: 'seeded playlist', songs: ids})
+    .then(function() {
       cb();
     });
   });
