@@ -12,6 +12,11 @@ module.exports = {
     youtubeId: {
       type: 'string',
       unique: true
+    },
+
+    playlists: {
+      collection: 'playlist',
+      via: 'songs'
     }
   }
 };

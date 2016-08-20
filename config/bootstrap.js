@@ -9,9 +9,17 @@
  * http://sailsjs.org/#!/documentation/reference/sails.config/sails.config.bootstrap.html
  */
 
-module.exports.bootstrap = function(cb) {
-
-  // It's very important to trigger this callback method when you are finished
-  // with the bootstrap!  (otherwise your server will never lift, since it's waiting on the bootstrap)
-  cb();
+module.exports.bootstrap = function (cb) {
+  if(sails.config.environment !== 'development') { return cb(); }
+  Promise.all([
+    Song.create({name: 'Song 1', youtubeId: 'abcd1234'}),
+    Song.create({name: 'Song 2', youtubeId: 'abcd12345'}),
+    Song.create({name: 'Song 3', youtubeId: 'abcd123456'})
+  ]).then(function(models) {
+    let ids = models.map(x => x.id);
+    Playlist.create({name: 'seeded playlist'})
+    .then(function(playlist) {
+      cb();
+    });
+  });
 };

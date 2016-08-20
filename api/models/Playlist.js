@@ -12,6 +12,11 @@ module.exports = {
       type: 'string',
       required: true,
       unique: true
+    },
+
+    songs: {
+      collection: 'song',
+      via: 'playlists'
     }
   }
 };

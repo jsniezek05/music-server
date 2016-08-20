@@ -6,6 +6,11 @@
  */
 
 module.exports = {
-	
+  find: function(req, res) {
+    Song.find()
+      .then(results => {
+        res.json(results);
+      });
+  }
 };
 
