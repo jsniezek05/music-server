@@ -17,6 +17,12 @@ module.exports = {
     songs: {
       collection: 'song',
       via: 'playlists'
+    },
+
+    user: {
+      model: 'user',
+      via: 'playlists',
+      required: true
     }
   }
 };

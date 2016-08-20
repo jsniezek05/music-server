@@ -6,6 +6,7 @@
  */
 
 module.exports = {
+
   homepage: function(req, res) {
     res.send("Music API");
   },
@@ -33,7 +34,7 @@ module.exports = {
       return User.findOne(req.session.authenticated)
         .then(user => {
           res.json(user);
-        })
+        });
     }
     return res.status(403).send("Invalid session");
   }

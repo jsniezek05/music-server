@@ -14,6 +14,16 @@ module.exports = {
       .catch(err => res.json(err));
   },
 
+  create: function(req, res) {
+    let newPlaylist = req.body;
+    newPlaylist.user = req.session.authenticated;
+    Playlist.create(newPlaylist)
+      .then(results => {
+        res.json(results);
+      })
+      .catch(err => res.json(err));
+  },
+
   addSong: function(req, res) {
     Playlist
       .findOne(req.params.id)

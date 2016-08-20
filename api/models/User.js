@@ -17,10 +17,16 @@ module.exports = {
       type: 'string',
       minLength: 6
     },
+
     email: {
       type: 'email',
       unique: true,
       required: true
+    },
+
+    playlists: {
+      collection: 'playlist',
+      via: 'user'
     },
 
     toJSON: function () {
