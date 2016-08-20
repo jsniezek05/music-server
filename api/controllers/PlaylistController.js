@@ -10,7 +10,8 @@ module.exports = {
     Playlist.find()
       .then(results => {
         res.json(results);
-      });
+      })
+      .catch(err => res.json(err));
   },
 
   addSong: function(req, res) {
@@ -23,7 +24,8 @@ module.exports = {
           .then(() => {
             res.json(model);
           });
-      });
+      })
+      .catch(err => res.json(err));
   },
 
   removeSong: function(req, res) {
@@ -36,7 +38,8 @@ module.exports = {
           .then(() => {
             res.json(model);
           });
-      });
+      })
+      .catch(err => res.json(err));
   }
 };
 

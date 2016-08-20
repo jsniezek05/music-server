@@ -1,4 +1,5 @@
 var bcrypt = require('bcrypt');
+const SALT_WORK_FACTOR = 10;
 
 /**
  * User.js
@@ -20,18 +21,43 @@ module.exports = {
       type: 'email',
       unique: true,
       required: true
+    },
+
+    toJSON: function () {
+      var obj = this.toObject();
+      delete obj.password;
+      return obj;
+    },
+
+    verifyPassword: function (password = '') {
+      return bcrypt.compareSync(password, this.password);
     }
   },
 
-  beforeCreate: function (values, cb) {
-
-    // Hash password
-    bcrypt.hash(values.password, 10, function(err, hash) {
-      if(err) return cb(err);
-      values.password = hash;
-      //calling cb() with an argument returns an error. Useful for canceling the entire operation if some criteria fails.
-      cb();
+  beforeCreate: function (attrs, cb) {
+    bcrypt.hash(attrs.password, SALT_WORK_FACTOR, function (err, hash) {
+      attrs.password = hash;
+      return cb();
     });
+  },
+
+  beforeUpdate: function (attrs, cb) {
+    if (attrs.newPassword) {
+      bcrypt.genSalt(SALT_WORK_FACTOR, function (err, salt) {
+        if (err) return cb(err);
+
+        bcrypt.hash(attrs.newPassword, salt, function (err, crypted) {
+          if (err) return cb(err);
+
+          delete attrs.newPassword;
+          attrs.password = crypted;
+          return cb();
+        });
+      });
+    }
+    else {
+      return cb();
+    }
   }
 };
 

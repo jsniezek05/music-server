@@ -10,7 +10,8 @@ module.exports = {
     Song.find()
       .then(results => {
         res.json(results);
-      });
+      })
+      .catch(err => res.json(err));
   }
 };
 

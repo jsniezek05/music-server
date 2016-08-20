@@ -11,10 +11,21 @@ module.exports = {
   },
 
 	login: function(req, res) {
-    res.json({ id: 1, firstName: 'JP', lastName: 'Sniezek', email: 'sniezekjp@aol.com' });
+    User.findOne({ email: req.body.email })
+      .then(user => {
+        if(!user) return res.status(404).send();
+        let verified = user.verifyPassword(req.body.password);
+        if(verified) {
+          res.json(user);
+        }
+        res.status(403).json({ error: "Please try again." });
+      });
   },
 
   auth: function(req, res) {
-    res.json({ id: 1, firstName: 'JP', lastName: 'Sniezek', email: 'sniezekjp@aol.com' });
+    User.find()
+      .then(users => {
+        res.json(users[0]);
+      });
   }
 };

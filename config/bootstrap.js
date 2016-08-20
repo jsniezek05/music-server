@@ -17,7 +17,11 @@ module.exports.bootstrap = function (cb) {
     Song.create({name: 'Song 3', youtubeId: 'abcd123456'})
   ]).then(function(models) {
     let ids = models.map(x => x.id);
-    Playlist.create({name: 'seeded playlist', songs: ids})
+    Promise.all([
+      Playlist.create({name: 'seeded playlist', songs: ids}),
+      User.create({firstName: 'JP', lastName: 'Sniezek', email: 'sniezekjp@aol.com', password: 'abcd1234'}),
+      User.create({firstName: 'Joe', lastName: 'Sniezek', email: 'jds045018@gmail.com', password: 'abcd1234'})
+    ])
     .then(function() {
       cb();
     });
