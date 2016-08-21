@@ -1,0 +1,587 @@
+swagger: '2.0'
+info:
+  title: music-server
+  description: a Sails application
+  version: 0.0.0
+  contact:
+    name: JohnS
+  license:
+    name: ''
+tags:
+  - name: Auth
+  - name: Playlist
+  - name: Song
+  - name: User
+definitions:
+  login: 
+    properties: 
+      email: 
+        type: string 
+        format: string 
+      password: 
+        type: string
+        format: string
+  newPlaylist:
+    properties:
+      name:
+        type: string
+        format: string
+  playlist:
+    properties:
+      name:
+        type: string
+        format: string
+      user:
+        type: integer
+        format: int32
+      id:
+        type: integer
+        format: int32
+      createdAt:
+        type: string
+        format: date-time
+      updatedAt:
+        type: string
+        format: date-time
+  song:
+    properties:
+      name:
+        type: string
+        format: string
+      youtubeId:
+        type: string
+        format: string
+      id:
+        type: integer
+        format: int32
+      createdAt:
+        type: string
+        format: date-time
+      updatedAt:
+        type: string
+        format: date-time
+  user:
+    properties:
+      firstName:
+        type: string
+        format: string
+      lastName:
+        type: string
+        format: string
+      password:
+        type: string
+        format: string
+      email:
+        type: string
+        format: string
+      id:
+        type: integer
+        format: int32
+      createdAt:
+        type: string
+        format: date-time
+      updatedAt:
+        type: string
+        format: date-time
+paths:
+  /auth:
+    get:
+      summary: Returns whether the user is still logged in.
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: The user is logged in
+        '403':
+          description: The user is not logged in
+        '500':
+          description: Internal server error
+      tags:
+        - Auth
+  /login:
+    post:
+      summary: Attempts to login the user given an email address and password
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema: 
+            $ref: '#/definitions/login'
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: The requested resource
+        '403':
+          description: The email or password was incorrect
+        '500':
+          description: Internal server error
+      tags:
+        - Auth          
+  /logout:
+    get:
+      summary: Read Object(s)
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: The requested resource
+        '404':
+          description: Resource not found
+        '500':
+          description: Internal server error
+      tags:
+        - Auth
+  /playlist:
+    get:
+      summary: Get a list of playlists
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: A array of playlists
+          schema:
+            $ref: '#/definitions/playlist'
+        '500':
+          description: Internal server error
+      tags:
+        - Playlist
+    post:
+      summary: Create a playlist
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters: 
+       - name: body 
+         in: body 
+         required: true 
+         schema: 
+           $ref: '#/definitions/newPlaylist'
+      responses:
+        '200':
+          description: The newly created playlist
+          schema:
+            $ref: '#/definitions/playlist'
+        '500':
+          description: Internal server error
+      tags:
+        - Playlist
+  '/playlist/{id}':
+    get:
+      summary: Read Object(s)
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: The requested playlist
+          schema:
+            $ref: '#/definitions/playlist'
+        '404':
+          description: Resource not found
+        '500':
+          description: Internal server error
+      tags:
+        - Playlist
+    post:
+      summary: Create a new playlist
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+        - name: body 
+          in: body 
+          required: true 
+          schema: 
+            $ref: '#/definitions/newPlaylist'
+      responses:
+        '200':
+          description: The requested resource
+          schema:
+            $ref: '#/definitions/playlist'
+        '404':
+          description: Resource not found
+        '500':
+          description: Internal server error
+      tags:
+        - Playlist
+    put:
+      summary: Update the playlist
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+        - name: body 
+          in: body 
+          required: true 
+          schema: 
+            $ref: '#/definitions/playlist'
+      responses:
+        '200':
+          description: The updated playlist
+          schema:
+            $ref: '#/definitions/playlist'
+        '404':
+          description: Resource not found
+        '500':
+          description: Internal server error
+      tags:
+        - Playlist
+    delete:
+      summary: Delete a playlist
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: The deleted playlist
+          schema:
+            $ref: '#/definitions/playlist'
+        '500':
+          description: Internal server error
+      tags:
+        - Playlist        
+  '/playlist/{id}/song/{songId}':
+    post:
+      summary: Add a song to a playlist
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+        - name: songId
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: The playlist
+          schema:
+            $ref: '#/definitions/playlist'
+        '404':
+          description: The playlist or song was not found
+        '500':
+          description: Internal server error
+      tags:
+        - Playlist        
+  /song:
+    get:
+      summary: Get songs
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: The requested resource
+          schema:
+            $ref: '#/definitions/song'
+        '404':
+          description: Resource not found
+        '500':
+          description: Internal server error
+      tags:
+        - Song
+    post:
+      summary: Create Object(s)
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: The requested resource
+          schema:
+            $ref: '#/definitions/song'
+        '404':
+          description: Resource not found
+        '500':
+          description: Internal server error
+      tags:
+        - Song
+  '/song/{id}':
+    get:
+      summary: Read Object(s)
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: The requested resource
+          schema:
+            $ref: '#/definitions/song'
+        '404':
+          description: Resource not found
+        '500':
+          description: Internal server error
+      tags:
+        - Song
+    post:
+      summary: Create Object(s)
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: The requested resource
+          schema:
+            $ref: '#/definitions/song'
+        '404':
+          description: Resource not found
+        '500':
+          description: Internal server error
+      tags:
+        - Song
+    put:
+      summary: Update Object(s)
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: The requested resource
+          schema:
+            $ref: '#/definitions/song'
+        '404':
+          description: Resource not found
+        '500':
+          description: Internal server error
+      tags:
+        - Song        
+  '/song/{parentid}/playlists/{id}':
+    get:
+      summary: Read Object(s)
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: parentid
+          in: path
+          required: true
+          type: string
+        - name: id
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: The requested resource
+          schema:
+            $ref: '#/definitions/playlist'
+        '404':
+          description: Resource not found
+        '500':
+          description: Internal server error
+      tags:
+        - Playlist
+        - Song
+    post:
+      summary: Create Object(s)
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: parentid
+          in: path
+          required: true
+          type: string
+        - name: id
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: The requested resource
+          schema:
+            $ref: '#/definitions/playlist'
+        '404':
+          description: Resource not found
+        '500':
+          description: Internal server error
+      tags:
+        - Playlist
+        - Song
+    delete:
+      summary: Destroy Object(s)
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: parentid
+          in: path
+          required: true
+          type: string
+        - name: id
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: The requested resource
+          schema:
+            $ref: '#/definitions/playlist'
+        '404':
+          description: Resource not found
+        '500':
+          description: Internal server error
+      tags:
+        - Playlist
+        - Song        
+  /user:
+    get:
+      summary: Read Object(s)
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: The requested resource
+          schema:
+            $ref: '#/definitions/user'
+        '404':
+          description: Resource not found
+        '500':
+          description: Internal server error
+      tags:
+        - User
+    post:
+      summary: Create Object(s)
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: The requested resource
+          schema:
+            $ref: '#/definitions/user'
+        '404':
+          description: Resource not found
+        '500':
+          description: Internal server error
+      tags:
+        - User
+  '/user/{id}':
+    get:
+      summary: Read Object(s)
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: The requested resource
+          schema:
+            $ref: '#/definitions/user'
+        '404':
+          description: Resource not found
+        '500':
+          description: Internal server error
+      tags:
+        - User
+    post:
+      summary: Create Object(s)
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: The requested resource
+          schema:
+            $ref: '#/definitions/user'
+        '404':
+          description: Resource not found
+        '500':
+          description: Internal server error
+      tags:
+        - User
+    put:
+      summary: Update Object(s)
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: The requested resource
+          schema:
+            $ref: '#/definitions/user'
+        '404':
+          description: Resource not found
+        '500':
+          description: Internal server error
+      tags:
+        - User        
