@@ -6,12 +6,5 @@
  */
 
 module.exports = {
-  find: function(req, res) {
-    User.find()
-      .then(results => {
-        res.json(results);
-      })
-      .catch(err => res.json(err));
-  }
 };
 

@@ -18,14 +18,17 @@ module.exports.bootstrap = function (cb) {
   ]).then(function(models) {
     let ids = models.map(x => x.id);
     Promise.all([
-      User.create({firstName: 'JP', lastName: 'Sniezek', email: 'sniezekjp@aol.com', password: 'abcd1234'}),
-      User.create({firstName: 'Joe', lastName: 'Sniezek', email: 'jds045018@gmail.com', password: 'abcd1234'})
+      User.create({firstName: 'JP', lastName: 'Sniezek', email: 'sniezekjp@aol.com', password: 'password'}),
+      User.create({firstName: 'Joe', lastName: 'Sniezek', email: 'jds045018@gmail.com', password: 'password'})
     ])
     .then(function(users) {
-      Playlist.create({name: 'First playlist', songs: ids, user: users[0].id})
-        .then(function() {
-          cb();
-        });
+      Promise.all([
+        Playlist.create({name: 'First playlist', songs: ids, user: users[0].id}),
+        Playlist.create({name: 'Second playlist', songs: ids, user: users[1].id})
+      ])
+      .then(function() {
+        cb();
+      });
     });
   });
 };
